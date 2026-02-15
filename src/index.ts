@@ -1,13 +1,39 @@
 import express from 'express';
+import rateLimit from "express-rate-limit";
 import pkg from '../package.json';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { PORT, DEV_ORIGIN } from './config/config';
 import mobAppRouter from './routes/mobAppRouter';
 import webRouter from './routes/webRouter';
+import { rateLimitHandler } from './utils/rateLimit';
 
 dotenv.config();
 const app = express();
+
+app.set("trust proxy", 1);
+
+const perSecondLimiter = rateLimit({
+    windowMs: 10 * 1000, // 10 second
+    max: 5,         // limit each IP to 5 requests per window
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res) => {
+
+        const clientIp = req.ip ?? "N/A";
+        rateLimitHandler(clientIp, req.path);
+
+        res.status(429).json({
+            error: "Too many requests, slow down.",
+            ip: clientIp,
+        });
+    },
+    // message: () => {
+    //     return "Too many requests, slow down.";
+    // },
+});
+
+app.use(perSecondLimiter);
 
 app.use(cors({
     origin: [DEV_ORIGIN],   // Allow this origin only
@@ -25,7 +51,7 @@ app.use('/web', webRouter);
 
 // Default route
 app.get("/", (req, res) => {
-  	res.status(200).send(`${req.method} Node App is on 🚀 APPNAME: ${pkg.name}`);
+    res.status(200).send(`${req.method} Node App is on 🚀 APPNAME: ${pkg.name}`);
 });
 
-app.listen(PORT, () => console.log (`APPNAME: ${pkg.name}\nServer is now running at port ${PORT}`))
+app.listen(PORT, () => console.log(`APPNAME: ${pkg.name}\nServer is now running at port ${PORT}`))

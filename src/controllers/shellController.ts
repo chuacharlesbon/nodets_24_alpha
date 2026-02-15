@@ -1,28 +1,16 @@
 import { Request, Response } from 'express';
-import { execFile } from 'node:child_process';
-import path from 'node:path';
+import { execShell } from '../utils/execShell';
+import { pathLogsHandler } from '../utils/pathLogs';
 
 export const shellController1 = (req: Request, res: Response): void => {
-
-    console.log("My shell controller req.method", req.method);
-    // res.status(200).json({ message: "Connected to my shell controller 1" });
-
-    const scriptPath = path.join(__dirname, '../../shell/main.sh');
-
-    execFile(`${scriptPath}`, (error, stdout, stderr) => {
-        if (error) {
-            res.writeHead(500, {"Content-Type": "text/plain"});
-            res.end(`Error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            res.writeHead(500, {"Content-Type": "text/plain"});
-            res.end(`Stderr: ${stderr}`);
-            return;
-        }
-
+    try {
+        const result = execShell("main.sh", ``);
         // Success → send shell output
         res.writeHead(200, {"Content-Type": "text/plain"});
-        res.end(stdout);
-    });
+        res.end(result);
+    } catch (err) {
+        const errMsg = `Cannot execute shell. ${err}`;
+        pathLogsHandler(req.path, "400", errMsg);
+        res.status(400).send(errMsg);
+    }
 };
