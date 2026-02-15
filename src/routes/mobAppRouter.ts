@@ -11,6 +11,6 @@ mobAppRouter.get("/ping", (req, res) => {
 
 mobAppRouter.get("/shell-test", shellController1);
 mobAppRouter.get("/logs-view", logsController1);
-mobAppRouter.get("/logsErrTestController", logsErrTestController);
+mobAppRouter.get("/logs-err-test", logsErrTestController);
 
 export default mobAppRouter;

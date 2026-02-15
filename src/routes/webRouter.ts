@@ -11,6 +11,6 @@ webRouter.get("/ping", (req, res) => {
 
 webRouter.get("/shell-test", shellController1);
 webRouter.get("/logs-view", logsController1);
-webRouter.get("/logsErrTestController", logsErrTestController);
+webRouter.get("/logs-err-test", logsErrTestController);
 
 export default webRouter;
