@@ -7,8 +7,8 @@ This is a Node.js backend application built using:
 - Express.js
 - TypeScript
 - Node 24.13.0 (via NVM)
-- Shell automation + logging features
-- Rate limiting and security monitoring capabilities
+- (shell branch) Basic shell automation + logging features
+- (shell branch) Rate limiting and security monitoring capabilities
 
 ---
 
