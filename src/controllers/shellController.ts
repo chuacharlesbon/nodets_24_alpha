@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import { execShell } from '../utils/execShell';
 import { pathLogsHandler } from '../utils/pathLogs';
 
-export const shellController1 = (req: Request, res: Response): void => {
+export const shellController1 = async (req: Request, res: Response): Promise<void> => {
     try {
-        const result = execShell("main.sh", []);
+        const result = await execShell("main.sh", []);
         // Success → send shell output
         res.type("text/plain").send(result);
     } catch (err) {
@@ -14,9 +14,9 @@ export const shellController1 = (req: Request, res: Response): void => {
     }
 };
 
-export const checkBackUpShellController = (req: Request, res: Response): void => {
+export const checkBackUpShellController = async (req: Request, res: Response): Promise<void> => {
     try {
-        const result = execShell("checkBackUpDir.sh", []);
+        const result = await execShell("checkBackUpDir.sh", []);
         // Success → send shell output
         res.type("text/plain").send(result);
     } catch (err) {
