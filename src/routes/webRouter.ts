@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 import { shellController1 } from "../controllers/shellController";
-import { logsController1, logsErrTestController } from "../controllers/logController";
+import { logsViewController, logsErrTestController, rateLimitLogsViewController } from "../controllers/logController";
 
 const webRouter: Router = express.Router();
 
@@ -10,7 +10,8 @@ webRouter.get("/ping", (req, res) => {
 });
 
 webRouter.get("/shell-test", shellController1);
-webRouter.get("/logs-view", logsController1);
+webRouter.get("/logs-view", logsViewController);
+webRouter.get("/rate-limit-logs-view", rateLimitLogsViewController);
 webRouter.get("/logs-err-test", logsErrTestController);
 
 export default webRouter;
