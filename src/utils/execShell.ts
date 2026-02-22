@@ -1,21 +1,26 @@
 import { execFile } from "child_process";
 import path from "path";
 
-export const execShell = (shellName: string, shellArguments: string[]): string => {
+export const execShell = (
+    shellName: string,
+    shellArguments: string[]
+): Promise<string> => {
 
     const scriptPath = path.join(__dirname, `../../shell/${shellName}`);
 
-    execFile(`${scriptPath}`, shellArguments, (error, stdout, stderr) => {
-        if (error) {
-            return error.message;
-        }
-        if (stderr) {
-            return stderr;
-        }
+    return new Promise((resolve, reject) => {
+        execFile(scriptPath, shellArguments, (error, stdout, stderr) => {
+            if (error) {
+                reject(error.message);
+                return;
+            }
 
-        // Success → send shell output
-        return stdout;
+            if (stderr) {
+                reject(stderr);
+                return;
+            }
+
+            resolve(stdout);
+        });
     });
-
-    return "OK"
-}
+};
