@@ -6,8 +6,19 @@ export const shellController1 = (req: Request, res: Response): void => {
     try {
         const result = execShell("main.sh", []);
         // Success → send shell output
-        res.writeHead(200, {"Content-Type": "text/plain"});
-        res.end(result);
+        res.type("text/plain").send(result);
+    } catch (err) {
+        const errMsg = `Cannot execute shell. ${err}`;
+        pathLogsHandler(req.path, "400", errMsg);
+        res.status(400).send(errMsg);
+    }
+};
+
+export const checkBackUpShellController = (req: Request, res: Response): void => {
+    try {
+        const result = execShell("checkBackUpDir.sh", []);
+        // Success → send shell output
+        res.type("text/plain").send(result);
     } catch (err) {
         const errMsg = `Cannot execute shell. ${err}`;
         pathLogsHandler(req.path, "400", errMsg);

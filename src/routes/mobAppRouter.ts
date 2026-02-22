@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { shellController1 } from "../controllers/shellController";
+import { checkBackUpShellController, shellController1 } from "../controllers/shellController";
 import { logsViewController, logsErrTestController, rateLimitLogsViewController } from "../controllers/logController";
 
 const mobAppRouter: Router = express.Router();
@@ -10,6 +10,7 @@ mobAppRouter.get("/ping", (req, res) => {
 });
 
 mobAppRouter.get("/shell-test", shellController1);
+mobAppRouter.get("/shell-backup-check", checkBackUpShellController);
 mobAppRouter.get("/logs-view", logsViewController);
 mobAppRouter.get("/rate-limit-logs-view", rateLimitLogsViewController);
 mobAppRouter.get("/logs-err-test", logsErrTestController);
